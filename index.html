@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Halloween Rewards</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#120a24;--card:#22153f;--line:#33225a;--tx:#fff;--mut:#a99bc9;--or:#ff8a2a;--pu:#8b5cf6;--gr:#1fbf8a}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;padding-bottom:84px}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.scr{display:none;padding:16px;max-width:480px;margin:auto}.scr.on{display:block}
+#load{position:fixed;inset:0;z-index:50;background:#0c0618;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px}
+#load .big{font-size:84px}#load h1{font-size:26px}
+.btn{background:linear-gradient(90deg,var(--pu),var(--or));padding:13px 22px;border-radius:12px;font-weight:700;width:100%}
+.btn.w{background:#fff;color:#1b1030}.btn.g{background:linear-gradient(90deg,#1fbf8a,#35d6a0)}
+.btn:disabled{background:#3a3a3f;color:#9a9aa0}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.top small{color:var(--mut)}.top h2{font-size:22px}
+.pill{background:rgba(255,255,255,.1);padding:7px 12px;border-radius:20px;font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.hero{background:linear-gradient(120deg,var(--or),var(--pu));border:0;position:relative}
+.hero small{opacity:.85}.hero .n{font-size:30px;font-weight:800;margin:4px 0}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;text-align:center}
+.cd div{background:#160c2c;border-radius:10px;padding:8px 0}.cd b{display:block;font-size:20px;color:var(--or)}.cd span{font-size:11px;color:var(--mut)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mine{display:flex;align-items:center;justify-content:space-around;margin:14px 0}
+.side{width:78px;height:86px;border-radius:14px;background:#2a1a12;border:2px solid var(--or);font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.side i{font-size:26px;font-style:normal}
+.coin{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#2fd9a2,#128a63);box-shadow:0 0 40px rgba(31,191,138,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:60px;font-weight:800;animation:pl 2.4s ease-in-out infinite}
+.coin small{font-size:11px;letter-spacing:2px}
+@keyframes pl{50%{box-shadow:0 0 60px rgba(31,191,138,.8)}}
+.amt{font-size:34px;font-weight:800}.amt span{font-size:15px;color:var(--mut)}
+.bar{height:6px;background:#3a2a60;border-radius:4px;margin:8px 0;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pu),var(--or))}
+.mut{color:var(--mut);font-size:13px}
+.task{display:flex;align-items:center;gap:12px}.task .ic{font-size:26px;width:44px;height:44px;border-radius:12px;background:#160c2c;display:flex;align-items:center;justify-content:center}
+.task .t{flex:1;font-weight:700}.task .t span{display:block;color:var(--or);font-size:13px}
+.go{background:linear-gradient(90deg,var(--pu),#a56bff);padding:8px 16px;border-radius:10px;font-weight:700}.go.d{background:#2c5f4c}
+.ring{width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;background:conic-gradient(#fff var(--p),rgba(255,255,255,.25) 0)}
+.ring b{width:68px;height:68px;border-radius:50%;background:#b04ad0;display:flex;align-items:center;justify-content:center}
+.link{background:#120a24;border:1px dashed var(--or);border-radius:10px;padding:11px;font-size:13px;word-break:break-all;margin:10px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.step{display:flex;gap:10px;align-items:center;margin-top:10px}.step b{width:24px;height:24px;border-radius:50%;background:var(--or);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+input{width:100%;background:#0d0719;border:1px solid var(--line);border-radius:10px;padding:12px;color:#fff;font:inherit;margin:10px 0}
+.net{display:flex;align-items:center;gap:10px}.net .l{width:36px;height:36px;border-radius:10px;font-weight:800;display:flex;align-items:center;justify-content:center;color:#111}
+.net .st{margin-left:auto;font-size:12px;color:var(--mut);background:#160c2c;padding:3px 9px;border-radius:10px}.net .st.ok{color:var(--gr)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#150c2b;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+nav button{background:none;color:var(--mut);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 14px}nav button i{font-style:normal;font-size:22px}nav button.on{color:var(--or)}
+.sh{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:flex-end;z-index:40}.sh.on{display:flex}
+.sh>div{background:var(--card);width:100%;max-width:480px;margin:auto;border-radius:22px 22px 0 0;padding:22px;text-align:center}
+.sh h3{font-size:22px;margin:8px 0}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#fff;color:#1b1030;padding:10px 18px;border-radius:12px;font-weight:700;z-index:60;display:none}
+</style>
+</head>
+<body>
+
+<div id="load"><div class="big">🎃</div><h1>Halloween Rewards</h1><button class="btn" style="width:auto" onclick="enter()">Enter the Haunt 🎃</button></div>
+<div class="toast" id="toast"></div>
+
+<!-- HOME -->
+<section class="scr on" id="home">
+  <div class="top"><div><small>Welcome 👋</small><h2 id="uname">Friend</h2></div><div class="pill">💰 <span id="bal">0.00</span></div></div>
+  <div class="card"><div class="row"><b>⏳ Distribution - <span id="dd">31 Oct</span></b><span class="mut">Refer <span class="rc">0</span>/3</span></div>
+    <div class="cd"><div><b id="cD">0</b><span>Days</span></div><div><b id="cH">0</b><span>Hrs</span></div><div><b id="cM">0</b><span>Min</span></div><div><b id="cS">0</b><span>Sec</span></div></div></div>
+  <div class="mine">
+    <button class="side" onclick="openTreat()"><i>🎃</i>Halloween Treat</button>
+    <div class="coin">₮<small>MINING</small></div>
+    <button class="side" onclick="dailyBonus()"><i>🎁</i>Daily Bonus</button>
+  </div>
+  <div class="card"><div class="mut">Mining Rewards</div><div class="amt"><span id="mine">0.00000</span> <span>USDT</span></div>
+    <div class="bar"><i id="mbar" style="width:0"></i></div>
+    <div class="mut">Max 10 USDT / day · har second reward add hota hai</div>
+    <button class="btn g" style="margin-top:12px" onclick="claimMine()">Claim to Balance</button></div>
+</section>
+
+<!-- TASKS -->
+<section class="scr" id="tasks">
+  <div class="top"><h2>🎯 Tasks</h2></div>
+  <div class="card hero"><small>Complete all tasks</small><div class="n">+3.5 USDT 🎃</div></div>
+  <div id="tl"></div>
+</section>
+
+<!-- REFER -->
+<section class="scr" id="refer">
+  <div class="top"><h2>👥 Refer &amp; Earn</h2></div>
+  <div class="card hero row"><div><small>Per friend</small><div class="n">+5 USDT</div><small><span class="rc">0</span>/3 refers = withdraw eligible</small></div><div class="ring" id="ring"><b><span class="rc">0</span>/3</b></div></div>
+  <div class="card"><b>Your invite link</b><div class="link" id="lnk"></div>
+    <div class="two"><button class="btn" onclick="copyLink()">📋 Copy</button><button class="btn w" onclick="shareLink()">✈️ Share</button></div></div>
+  <div class="card"><b>How it works</b>
+    <div class="step"><b>1</b>Link friends ko bhejo</div>
+    <div class="step"><b>2</b>Friend bot start kare aur join ho</div>
+    <div class="step"><b>3</b>Dono ko reward, aapko +5 USDT</div></div>
+  <div class="card"><b>Your friends</b><div id="fl" class="mut" style="margin-top:8px">Abhi koi friend join nahi hua</div></div>
+</section>
+
+<!-- WALLET -->
+<section class="scr" id="wallet">
+  <div class="top"><h2>💸 Wallet</h2></div>
+  <div class="card hero" style="text-align:center"><small>Available Balance</small>
+    <div class="amt" style="font-size:46px;margin:6px 0"><span id="wbal">0.00</span> <span style="color:#fff">USDT</span></div>
+    <small>No minimum · Payout <span id="pd">31 Oct 2026</span></small>
+    <button class="btn w" style="margin-top:14px" onclick="withdraw()">Withdraw</button></div>
+  <b>Wallet Address</b><div class="mut" style="margin:4px 0 10px">Apna network chuno aur sirf address submit karo</div>
+  <div id="nets"></div>
+</section>
+
+<nav>
+  <button class="on" data-t="home"><i>🏠</i>Home</button>
+  <button data-t="tasks"><i>🎯</i>Tasks</button>
+  <button data-t="refer"><i>👥</i>Refer</button>
+  <button data-t="wallet"><i>💸</i>Wallet</button>
+</nav>
+
+<!-- TREAT SHEET -->
+<div class="sh" id="treat" onclick="if(event.target===this)closeSh('treat')"><div>
+  <div style="font-size:40px">🎃</div><h3>Halloween Treat</h3><div class="mut">Roz ka secret code daalo aur +1 USDT jeeto</div>
+  <input id="code" placeholder="ENTER DAILY CODE" style="text-align:center;letter-spacing:2px;text-transform:uppercase">
+  <button class="btn" onclick="claimCode()">Claim Reward</button></div></div>
+
+<!-- LOCK SHEET -->
+<div class="sh" id="lock" onclick="if(event.target===this)closeSh('lock')"><div>
+  <div style="font-size:40px">🔒</div><h3>Withdrawal opens <span id="lo">31 October</span></h3>
+  <div class="mut"><span id="ldays">0</span> din baaki · 3 refers complete karke eligible bano</div>
+  <div class="card" style="text-align:left;margin-top:14px">
+    <div><b><span class="rc">0</span>/3 Refers complete</b></div>
+    <div style="margin-top:8px"><b id="lw">Wallet address not saved</b></div>
+    <div style="margin-top:8px"><b>Payout date</b> <span class="mut" id="lp"></span></div></div>
+  <button class="btn" onclick="closeSh('lock');show('refer')">Invite Friends</button></div></div>
+
+<script>
+/* ===== SETTINGS: yahan change karo ===== */
+const CFG={
+  API:"https://YOUR-BACKEND-URL",  // backend ka link (Railway/Render)
+  BOT:"YourBotName",            // bot username (bina @)
+  APP:"",                       // mini app short name; khali = bot link use hoga
+  PAYOUT:new Date("2026-10-31T00:00:00"),
+  REFS_NEEDED:3, PER_REF:5, DAILY_MAX:10, TREAT:1, BONUS:0.5,
+  TASKS:[
+    {id:"ch", ic:"📢", t:"Join Telegram Channel", r:2,   url:"https://t.me/yourchannel"},
+    {id:"gr", ic:"👥", t:"Join Telegram Group",   r:1,   url:"https://t.me/yourgroup"},
+    {id:"tw", ic:"🐦", t:"Follow on Twitter / X", r:0.5, url:"https://x.com/youraccount"}
+  ]
+};
+/* ======================================= */
+const tg=window.Telegram&&Telegram.WebApp; if(tg){tg.ready();tg.expand();}
+const U=(tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user)||{id:790318,first_name:"Friend"};
+const KEY="hw_"+U.id, today=()=>new Date().toDateString();
+let S={bal:0,mineFrom:Date.now(),tasks:{},friends:[],addr:{},codeDone:false,bonusDone:false};
+const save=()=>{};
+async function api(p,b){try{const r=await fetch(CFG.API+"/api/"+p,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initData:tg?tg.initData:"",...b})});const j=await r.json();if(!r.ok){toast(j.error||"Error");return null}if(j.state)S=j.state;return j}catch(e){toast("Network error");return null}}
+const $=id=>document.getElementById(id), f2=n=>n.toFixed(2);
+const toast=m=>{const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(t._t);t._t=setTimeout(()=>t.style.display="none",2200)};
+const fmtD=d=>d.toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+
+function enter(){$("load").style.display="none"}
+function show(id){document.querySelectorAll(".scr").forEach(s=>s.classList.toggle("on",s.id===id));
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===id));scrollTo(0,0)}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.t));
+const openSh=id=>$(id).classList.add("on"), closeSh=id=>$(id).classList.remove("on");
+
+/* mining */
+const mined=()=>Math.min(CFG.DAILY_MAX,(Date.now()-S.mineFrom)/86400000*CFG.DAILY_MAX);
+async function claimMine(){const b=S.bal;if(await api("claim")){render();toast("+"+(S.bal-b).toFixed(4)+" USDT balance me add")}}
+
+/* treat + bonus */
+function openTreat(){openSh("treat")}
+async function claimCode(){if(await api("code",{code:$("code").value})){closeSh("treat");$("code").value="";render();toast("+"+CFG.TREAT+" USDT mil gaye 🎃")}}
+async function dailyBonus(){if(await api("bonus")){render();toast("+"+CFG.BONUS+" USDT Daily Bonus 🎁")}}
+
+/* tasks */
+function drawTasks(){$("tl").innerHTML=CFG.TASKS.map(k=>`<div class="card task"><div class="ic">${k.ic}</div><div class="t">${k.t}<span>+${k.r} USDT</span></div>
+  <button class="go ${S.tasks[k.id]?"d":""}" onclick="doTask('${k.id}')">${S.tasks[k.id]?"Done ✓":"Join"}</button></div>`).join("")}
+function doTask(id){const k=CFG.TASKS.find(x=>x.id===id);if(S.tasks[id])return;
+  tg?tg.openLink(k.url):window.open(k.url,"_blank");
+  setTimeout(async()=>{if(await api("task",{id})){render();toast("+"+k.r+" USDT task complete")}},4000);}
+
+/* refer */
+const refLink=()=>CFG.APP?`https://t.me/${CFG.BOT}/${CFG.APP}?startapp=ref${U.id}`:`https://t.me/${CFG.BOT}?start=ref${U.id}`;
+function copyLink(){navigator.clipboard.writeText(refLink()).then(()=>toast("Link copy ho gaya"),()=>toast("Copy nahi hua"))}
+function shareLink(){const u="https://t.me/share/url?url="+encodeURIComponent(refLink())+"&text="+encodeURIComponent("Halloween Rewards me USDT kamao 🎃");tg?tg.openTelegramLink(u):window.open(u,"_blank")}
+
+/* wallet */
+const NETS=[{k:"bep20",n:"BEP20",s:"BNB Smart Chain",l:"B",c:"#f3ba2f",p:"0x… address",ok:/^0x[a-fA-F0-9]{40}$/},
+            {k:"trc20",n:"TRC20",s:"Tron Network",l:"T",c:"#ef4444",p:"T… address",ok:/^T[1-9A-HJ-NP-Za-km-z]{33}$/},
+            {k:"ton",n:"TON",s:"The Open Network",l:"◆",c:"#2aa7ff",p:"UQ… / EQ… address",ok:/^(UQ|EQ)[\w-]{46}$/}];
+function drawNets(){$("nets").innerHTML=NETS.map(n=>`<div class="card"><div class="net"><div class="l" style="background:${n.c}">${n.l}</div><div><b>${n.n}</b><div class="mut">${n.s}</div></div><div class="st ${S.addr[n.k]?"ok":""}">${S.addr[n.k]?"Saved":"Not set"}</div></div>
+  <input id="a_${n.k}" placeholder="${n.p}" value="${S.addr[n.k]||""}"><button class="btn" onclick="saveAddr('${n.k}')">Save Address</button></div>`).join("")}
+async function saveAddr(k){const n=NETS.find(x=>x.k===k),v=$("a_"+k).value.trim();if(!n.ok.test(v))return toast("Address sahi nahi hai");if(await api("addr",{k,v})){render();toast(n.n+" address saved")}}
+function withdraw(){openSh("lock")}
+
+/* render + timers */
+function render(){
+  $("uname").textContent=U.first_name||"Friend";$("bal").textContent=f2(S.bal);$("wbal").textContent=f2(S.bal);
+  document.querySelectorAll(".rc").forEach(e=>e.textContent=S.friends.length);
+  $("ring").style.setProperty("--p",Math.min(100,S.friends.length/CFG.REFS_NEEDED*100)+"%");
+  $("lnk").textContent=refLink();
+  $("fl").innerHTML=S.friends.length?S.friends.map((x,i)=>`<div class="row" style="margin-top:6px"><span>🧑 Friend #${i+1}</span><b style="color:var(--gr)">+${CFG.PER_REF} USDT</b></div>`).join(""):"Abhi koi friend join nahi hua";
+  const d=fmtD(CFG.PAYOUT);$("dd").textContent=d;$("pd").textContent=d+" "+CFG.PAYOUT.getFullYear();
+  $("lo").textContent=CFG.PAYOUT.toLocaleDateString("en-GB",{day:"numeric",month:"long"});$("lp").textContent=d+" "+CFG.PAYOUT.getFullYear();
+  $("lw").textContent=Object.keys(S.addr).length?"Wallet address saved ✓":"Wallet address not saved";
+  drawTasks();drawNets();
+}
+function tick(){const m=mined();$("mine").textContent=m.toFixed(5);$("mbar").style.width=(m/CFG.DAILY_MAX*100)+"%";
+  let s=Math.max(0,Math.floor((CFG.PAYOUT-Date.now())/1000));
+  $("cD").textContent=Math.floor(s/86400);$("cH").textContent=Math.floor(s%86400/3600);$("cM").textContent=Math.floor(s%3600/60);$("cS").textContent=s%60;
+  $("ldays").textContent=Math.ceil(s/86400);}
+render();tick();setInterval(tick,1000);api("me").then(render);
+</script>
+</body>
+</html>
